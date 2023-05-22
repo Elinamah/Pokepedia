@@ -7,6 +7,7 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
+  Linking,
   FlatList,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -14,30 +15,21 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 export const Overview = ({ navigation }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [offset, setOffset] = useState(0);
-  const [limit, setLimit] = useState(20);
 
   useEffect(() => {
-    setPokemonList([]); // Reset the pokemonList when offset changes
+    setPokemonList([]);
     fetchPokemons();
-  }, [offset, limit]);
+  }, []);
 
   const fetchPokemons = () => {
-    const currentOffset = pokemonList.length;
-    fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=${currentOffset}&limit=${limit}`
-    )
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
       .then((response) => response.json())
       .then((data) => {
-        setPokemonList((prevList) => [...prevList, ...data.results]);
+        setPokemonList(data.results);
       })
       .catch((error) => {
         console.error(error);
       });
-  };
-
-  const handleLoadMore = () => {
-    setOffset((prevOffset) => prevOffset + limit);
   };
 
   const handleSearch = (text) => {
@@ -46,6 +38,14 @@ export const Overview = ({ navigation }) => {
 
   const filteredPokemon = pokemonList.filter((p) =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handlePokemonPress = (uri) => {
+    Linking.openURL(uri);
+  };
+
+  const renderPokemonItem = ({ item }) => (
+    <PokemonItem item={item} onPress={() => handlePokemonPress(item.url)} />
   );
 
   return (
@@ -58,39 +58,11 @@ export const Overview = ({ navigation }) => {
           value={searchTerm}
         />
       </View>
-      <ScrollView>
-        {filteredPokemon.map((pokemon) => (
-          <TouchableOpacity
-            style={styles.box}
-            key={pokemon.name}
-            onPress={() =>
-              navigation.navigate("Details", {
-                name: pokemon.name,
-                id: pokemon.id,
-              })
-            }
-          >
-            <Image
-              source={{
-                uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                  pokemon.url.split("/")[6]
-                }.png`,
-              }}
-              style={styles.sprite}
-            />
-            <Text style={styles.name}>{pokemon.name}</Text>
-          </TouchableOpacity>
-        ))}
-        <View style={styles.loadMoreButtonContainer}>
-          <TouchableOpacity
-            style={styles.loadMoreButton}
-            onPress={handleLoadMore}
-          >
-            <Text style={styles.loadMoreButtonText}>Load More</Text>
-          </TouchableOpacity>
-        </View>
-        <StatusBar style="auto" />
-      </ScrollView>
+      <FlatList
+        data={filteredPokemon}
+        renderItem={renderPokemonItem}
+        keyExtractor={(item) => item.name}
+      />
     </View>
   );
 };
@@ -139,3 +111,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+class PokemonItem extends React.PureComponent {
+  handlePress = () => {
+    this.props.onPress(this.props.item.url);
+  };
+
+  render() {
+    const { item } = this.props;
+
+    return (
+      <TouchableOpacity
+        style={styles.box}
+        key={item.name}
+        onPress={this.handlePress}
+      >
+        <Image
+          source={{
+            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+              item.url.split("/")[6]
+            }.png`,
+          }}
+          style={styles.sprite}
+        />
+        <Text style={styles.name}>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  }
+}
