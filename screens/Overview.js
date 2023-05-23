@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { PokemonItem } from "../components/PokemonItem";
+
 export const Overview = ({ navigation }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,16 +40,7 @@ export const Overview = ({ navigation }) => {
   );
 
   const renderPokemonItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("PokemonDetails", {
-          name: item.name,
-          id: item.id,
-        })
-      }
-    >
-      <PokemonItem item={item} />
-    </TouchableOpacity>
+    <PokemonItem item={item} navigation={navigation} />
   );
 
   return (
@@ -113,31 +106,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-class PokemonItem extends React.PureComponent {
-  handlePress = () => {
-    this.props.onPress(this.props.item.url);
-  };
-
-  render() {
-    const { item } = this.props;
-
-    return (
-      <TouchableOpacity
-        style={styles.box}
-        key={item.name}
-        onPress={this.handlePress}
-      >
-        <Image
-          source={{
-            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-              item.url.split("/")[6]
-            }.png`,
-          }}
-          style={styles.sprite}
-        />
-        <Text style={styles.name}>{item.name}</Text>
-      </TouchableOpacity>
-    );
-  }
-}
