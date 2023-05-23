@@ -2,9 +2,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native";
 
-import { Details } from "./screens/Details";
 import { Menu } from "./screens/Menu";
 import { Overview } from "./screens/Overview";
+import { PokemonDetails } from "./screens/PokemonDetails";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -24,8 +24,8 @@ export default function App() {
             options={({ route }) => ({ title: route.params.name })}
           />
           <Stack.Screen
-            name="Details"
-            component={Details}
+            name="PokemonDetails"
+            component={PokemonDetails}
             options={({ route }) => ({ title: route.params.name })}
           />
         </Stack.Navigator>

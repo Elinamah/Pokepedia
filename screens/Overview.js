@@ -4,13 +4,10 @@ import {
   Text,
   View,
   Image,
-  StatusBar,
-  ScrollView,
   TextInput,
-  Linking,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const Overview = ({ navigation }) => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -40,12 +37,17 @@ export const Overview = ({ navigation }) => {
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handlePokemonPress = (uri) => {
-    Linking.openURL(uri);
-  };
-
   const renderPokemonItem = ({ item }) => (
-    <PokemonItem item={item} onPress={() => handlePokemonPress(item.url)} />
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("PokemonDetails", {
+          name: item.name,
+          id: item.id,
+        })
+      }
+    >
+      <PokemonItem item={item} />
+    </TouchableOpacity>
   );
 
   return (
