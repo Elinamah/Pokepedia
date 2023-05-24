@@ -4,7 +4,7 @@ export const PokemonItem = ({ item, navigation }) => {
   const handlePress = () => {
     navigation.navigate("PokemonDetails", {
       name: item.name,
-      id: item.id,
+      url: item.url,
     });
   };
 

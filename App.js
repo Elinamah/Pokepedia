@@ -4,7 +4,10 @@ import { View } from "react-native";
 
 import { Menu } from "./screens/Menu";
 import { Overview } from "./screens/Overview";
+import { PokemonAttacks } from "./screens/PokemonAttacks";
 import { PokemonDetails } from "./screens/PokemonDetails";
+import { PokemonHome } from "./screens/PokemonHome";
+import { PokemonMiscellaneous } from "./screens/PokemonMiscellaneous";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -26,6 +29,21 @@ export default function App() {
           <Stack.Screen
             name="PokemonDetails"
             component={PokemonDetails}
+            options={({ route }) => ({ title: route.params.name })}
+          />
+          <Stack.Screen
+            name="PokemonHome"
+            component={PokemonHome}
+            options={({ route }) => ({ title: route.params.name })}
+          />
+          <Stack.Screen
+            name="PokemonAttacks"
+            component={PokemonAttacks}
+            options={({ route }) => ({ title: route.params.name })}
+          />
+          <Stack.Screen
+            name="PokemonMiscellaneous"
+            component={PokemonMiscellaneous}
             options={({ route }) => ({ title: route.params.name })}
           />
         </Stack.Navigator>
