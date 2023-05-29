@@ -1,44 +1,99 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigatior } from "@react-navigation/bottom-tabs";
-import Icon from "react-native-ico-material-design";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  FlatList,
+  Dimensions,
+} from "react-native";
 
-// Screens
-import { PokemonAttacks } from "./screens/PokemonAttacks";
-import { PokemonHome } from "./screens/PokemonHome";
-import { PokemonMiscellaneous } from "./screens/PokemonMiscellaneous";
+import { PokemonItem } from "../components/PokemonItem";
 
-// Screen names
-const home = "Home";
-const attack = "Attack";
-const miscellaneous = "Miscellaneous";
+export const Overview = ({ navigation }) => {
+  const [pokemonList, setPokemonList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-const Tab = createBottomTabNavigatior();
+  useEffect(() => {
+    setPokemonList([]);
+    fetchPokemons();
+  }, []);
 
-export default function Overview({ navigation }) {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName={home}
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            let routeName = route.name;
+  const fetchPokemons = () => {
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
+      .then((response) => response.json())
+      .then((data) => {
+        setPokemonList(data.results);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-            if (routeName === home) {
-              iconName = focused ? "home" : "home-outline";
-            } else if (routeName === attack) {
-              iconName = focused ? "attack" : "attack-outline";
-            } else if (routeName === miscellaneous) {
-              iconName = focused ? "miscellaneous" : "miscellaneous-outline";
-            }
+  const handleSearch = (text) => {
+    setSearchTerm(text);
+  };
 
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        })}
-      >
-        <Tab.Screen name={home} component={PokemonHome} />
-      </Tab.Navigator>
-    </NavigationContainer>
+  const filteredPokemon = pokemonList.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-}
+
+  const renderPokemonItem = ({ item }) => (
+    <PokemonItem item={item} navigation={navigation} />
+  );
+
+  const windowWidth = Dimensions.get("window").width;
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchBarContainer}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search"
+          onChangeText={handleSearch}
+          value={searchTerm}
+        />
+      </View>
+      <FlatList
+        style={styles}
+        data={filteredPokemon}
+        numColumns={3}
+        renderItem={renderPokemonItem}
+        keyExtractor={(item) => item.name}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: "#fff",
+  },
+  box: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    margin: 5,
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  sprite: {
+    width: Dimensions.get("window").width / 3,
+    height: 100,
+    margin: 10,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "capitalize",
+  },
+  searchBarContainer: {
+    margin: 5,
+  },
+  searchBar: {
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    borderRadius: 5,
+  },
+});
