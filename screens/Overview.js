@@ -41,8 +41,6 @@ export const Overview = ({ navigation }) => {
     <PokemonItem item={item} navigation={navigation} />
   );
 
-  const windowWidth = Dimensions.get("window").width;
-
   return (
     <View style={styles.container}>
       <View style={styles.searchBarContainer}>

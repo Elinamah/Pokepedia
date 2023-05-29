@@ -1,4 +1,11 @@
-import { Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
 
 export const PokemonItem = ({ item, navigation }) => {
   const handlePress = () => {
@@ -10,15 +17,20 @@ export const PokemonItem = ({ item, navigation }) => {
 
   return (
     <TouchableOpacity style={styles.box} key={item.name} onPress={handlePress}>
-      <Image
-        source={{
-          uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-            item.url.split("/")[6]
-          }.png`,
-        }}
-        style={styles.sprite}
-      />
-      <Text style={styles.name}>{item.name}</Text>
+      <ImageBackground
+        source={{ uri: "https://wallpaperaccess.com/full/1794017.png" }}
+        style={styles.background}
+      >
+        <Image
+          source={{
+            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+              item.url.split("/")[6]
+            }.png`,
+          }}
+          style={styles.sprite}
+        />
+        <Text style={styles.name}>{item.name}</Text>
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -32,9 +44,15 @@ const styles = StyleSheet.create({
   box: {
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "red",
+    borderColor: "orange",
     margin: 2,
     alignItems: "center",
+    backgroundColor: "yellow"
+  },
+  background: {
+    width: 120,
+    borderRadius: 10,
+    margin: 4,
   },
   sprite: {
     width: 108,
@@ -45,6 +63,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "capitalize",
+    textAlign: "center"
   },
   searchBarContainer: {
     margin: 10,

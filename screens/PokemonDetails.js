@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { View, Text, Image, StyleSheet, ImageBackground, Dimensions } from "react-native";
 
 export const PokemonDetails = ({ route }) => {
   const [pokemon, setPokemon] = useState(null);
@@ -24,20 +23,25 @@ export const PokemonDetails = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {pokemon && (
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: pokemon.sprites.front_default }}
-            style={styles.image}
-          />
+      <ImageBackground
+        source={{ uri: "https://wallpaperaccess.com/full/1794017.png" }}
+        style={styles.backgroundImage}
+      >
+        {pokemon && (
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: pokemon.sprites.front_default }}
+              style={styles.image}
+            />
+          </View>
+        )}
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Pokémon Name: {route.params.name}</Text>
         </View>
-      )}
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>Pokémon Name: {route.params.name}</Text>
-      </View>
-      <View style={styles.textContainer}>
-        {pokemon && <Text style={styles.text}>Pokémon ID: {pokemon.id}</Text>}
-      </View>
+        <View style={styles.textContainer}>
+          {pokemon && <Text style={styles.text}>Pokémon ID: {pokemon.id}</Text>}
+        </View>
+      </ImageBackground>
     </View>
   );
 };
@@ -47,14 +51,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#3cdfff",
+    ImageBackground: { uri: "https://wallpaperaccess.com/full/1794017.png" },
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textContainer: {
     backgroundColor: "white",
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
-    margin: 10
+    margin: 10,
   },
   imageContainer: {
     width: 200,
