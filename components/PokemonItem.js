@@ -9,7 +9,7 @@ import {
 export const PokemonItem = ({ item, navigation }) => {
   const handlePress = () => {
     navigation.navigate("PokemonDetails", {
-       name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+      name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
       url: item.url,
     });
   };
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderColor: "orange",
     margin: 2,
     alignItems: "center",
-    backgroundColor: "yellow"
+    backgroundColor: "yellow",
   },
   background: {
     width: 120,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "capitalize",
-    textAlign: "center"
+    textAlign: "center",
   },
   searchBarContainer: {
     margin: 10,

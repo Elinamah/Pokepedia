@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   ScrollView,
+  Dimensions,
 } from "react-native";
 
 export const PokemonDetails = ({ route }) => {
@@ -35,18 +36,20 @@ export const PokemonDetails = ({ route }) => {
         >
           {pokemon && (
             <View style={styles.imageContainer}>
-              <Image
-                source={{ uri: pokemon.sprites.front_default }}
-                style={styles.image}
-              />
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{ uri: pokemon.sprites.front_default }}
+                  style={styles.image}
+                />
+                <Image
+                  source={{ uri: pokemon.sprites.front_shiny }}
+                  style={styles.image}
+                />
+              </View>
             </View>
           )}
           <View style={styles.textContainer}>
-            {pokemon && (
-              <Text style={styles.textTitle}>
-                ID:<Text style={styles.text}>{pokemon.id}</Text>
-              </Text>
-            )}
+            {pokemon && <Text style={styles.text}>ID: {pokemon.id}</Text>}
           </View>
           <View style={styles.textContainer}>
             {pokemon && (
@@ -62,7 +65,6 @@ export const PokemonDetails = ({ route }) => {
               </Text>
             )}
           </View>
-
           <View style={styles.textContainer}>
             {pokemon && (
               <Text style={styles.text}>
@@ -87,7 +89,6 @@ export const PokemonDetails = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    ImageBackground: { uri: "https://wallpaperaccess.com/full/1794017.png" },
   },
   backgroundImage: {
     flex: 1,
@@ -102,9 +103,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     margin: 10,
   },
+  imageContainer: {
+    alignItems: "center",
+  },
+  imageWrapper: {
+    flexDirection: "row", // Display images side by side
+  },
   image: {
-    width: 250,
-    height: 250,
+    width: Dimensions.get("window").width / 2.1,
+    height: 200,
     borderRadius: 10,
     borderWidth: 3,
     borderColor: "black",
@@ -114,11 +121,5 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: "black",
-    fontWeight: "normal",
-  },
-  textTitle: {
-    fontSize: 20,
-    color: "black",
-    fontWeight: "bold",
   },
 });
