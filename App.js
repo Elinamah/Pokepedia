@@ -33,7 +33,12 @@ export default function App() {
           <Stack.Screen
             name="PokemonDetails"
             component={PokemonDetails}
-            options={({ route }) => ({ title: route.params.name })}
+            options={({ route }) => ({
+              title: route.params.name,
+              headerStyle: {
+                backgroundColor: "red",
+              },
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>

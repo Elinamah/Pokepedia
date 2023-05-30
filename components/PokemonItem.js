@@ -4,13 +4,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
-  Dimensions,
 } from "react-native";
 
 export const PokemonItem = ({ item, navigation }) => {
   const handlePress = () => {
     navigation.navigate("PokemonDetails", {
-      name: item.name,
+       name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
       url: item.url,
     });
   };
